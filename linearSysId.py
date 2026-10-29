@@ -68,7 +68,7 @@ for nn in n_train:
     W   = W + [np.column_stack([u.T,d.T])]
     
 
-## optimize SINDy model
+### optimize SINDy model
 opt   = ps.STLSQ(threshold=0*1e-32, normalize_columns=False)
 model = ps.SINDy(feature_library=custom_library, optimizer=opt)
 
