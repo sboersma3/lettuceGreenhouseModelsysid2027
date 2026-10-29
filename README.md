@@ -57,7 +57,7 @@ $$
 \end{aligned}
 $$
 
-The model and varaible content is equal as above. The controller model only does not contain process and measurement noise.
+The model and variable content are as described above. The controller model only does not contain process and measurement noise.
 
 For more detail about the model predictive controller, the reader is referred to:
 
