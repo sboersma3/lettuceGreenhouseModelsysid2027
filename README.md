@@ -22,11 +22,11 @@ This directory contains benchmark dataset and a dynamical lettuce greenhouse mod
 
 $$
 \begin{aligned}
-\frac{\text{d}x(t)}{\text{d}t} &= f\left( x(t),u(t),d(t),w(t),p \right), \qquad  &y(t) = g\left( x(t),u(t),d(t),v(t),p \right) \\
+\frac{\text{d}x(t)}{\text{d}t} &= f\left( x(t),u(t),d(t),w(t),p \right), \qquad  &y(t) = g\left( x(t),u(t),d(t),v(t),p \right), \\
 \end{aligned}
 $$
 
-with continuous time $t \in \mathbb{R}$, nonlinear functions $f(\cdot), g(\cdot)$, model parameter $p \in \mathbb{R}^{28}$ and 
+with continuous time $t \in \mathbb{R}$, nonlinear functions $f(\cdot), g(\cdot)$, model parameter $p \in \mathbb{R}^{28}$ and: 
 
 variable|meaning|variable|meaning
 ---|---|---|---
@@ -49,7 +49,14 @@ For more detail about the model, the reader is referred to:
 - Eldert van Henten (1994). Greenhouse climate management: an optimal control approach. Ph.D. thesis, University Wageningen.
 
 ## Model Predictive Control
-The data generation is done using a model predictive controller. In order to generate new data, install CasADi https://web.casadi.org/get/. 
+The data generation is done using a model predictive controller and CasADi. In the model predictive controller, the following model is used:
+
+$$
+\begin{aligned}
+\frac{\text{d}\hat{x}(t)}{\text{d}t} &= f\left( \hat{x}(t),u(t),d(t),p \right), \qquad  &\hat{y}(t) = g\left( \hat{x}(t),u(t),d(t),p \right). \\
+\end{aligned}
+$$
+The model and varaible content is equal as above. The controller model only does not contain process and measurement noise.
 
 For more detail about the model predictive controller, the reader is referred to:
 
