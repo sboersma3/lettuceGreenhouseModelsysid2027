@@ -63,3 +63,16 @@ For more detail about the model predictive controller, the reader is referred to
 
 - Sjoerd Boersma, Congcong Sun and Simon Van Mourik (2022). Robust sample-based model predictive control of a greenhouse system with parametric uncertainty. IFAC-PapersOnLine, 55 (32) (2022), pp. 177-182.
 
+## Linear System Identification
+
+For more detail about the linear system identification method, the reader is referred to:
+
+- Steven L. Brunton, Joshua L. Proctor, and J. Nathan Kutz (2016). Discovering governing equations from data by sparse identification of nonlinear dynamical systems. Proceedings of the national academy of sciences 113 (15), 3932-3937.
+- https://pysindy.readthedocs.io/en/latest/summary.html
+
+## Nonlinear System Identification
+
+For more detail about the nonlinear system identification method, the reader is referred to:
+
+- ...
+
