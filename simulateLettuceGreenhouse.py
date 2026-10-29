@@ -8,7 +8,7 @@ import pandas as pd
 
 df    = []
 N0    = np.array([0, 20448, 40896, 61334, 81504])          # initial samples different scenarios
-#N0    = np.array([0])          # initial samples different scenarios
+#N0    = np.array([0])                                      # pick one scenario scenarios
 casus = ['train','validation','train','test','train']      # case corresponding to element in N0
 for nn in range(len(N0)):
     
@@ -24,7 +24,7 @@ for nn in range(len(N0)):
     
     # simulation parameters
     c         = 86400
-    nDays     = 2                                      # #days in simulation (max = 46 weeks)
+    nDays     = 40                                      # #days in simulation (max = 46 weeks)
     ops['h']  = 15*60                                   # sample period in seconds: #minutes*60
     ops['L']  = nDays*c                                 # final time simulation
     ops['t']  = np.arange(0,ops['L']+ops['h'],ops['h']) # initial time vector
@@ -66,6 +66,10 @@ for nn in range(len(N0)):
 df = pd.concat(df,ignore_index=True)
 
 df.to_csv("data/lettuceGreenhouseBenchmarkData.csv", index=False)
+
+
+
+
 
 ###############################################################################
 ###############################################################################
