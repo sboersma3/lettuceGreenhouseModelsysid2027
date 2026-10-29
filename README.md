@@ -53,9 +53,10 @@ The data generation is done using a model predictive controller and CasADi. In t
 
 $$
 \begin{aligned}
-\frac{\text{d}\hat{x}(t)}{\text{d}t} &= f\left( \hat{x}(t),u(t),d(t),p \right), \qquad  &\hat{y}(t) = g\left( \hat{x}(t),u(t),d(t),p \right). \\
+\frac{\text{d}x(t)}{\text{d}t} &= f\left( x(t),u(t),d(t),p \right), \qquad  &y(t) = g\left( x(t),u(t),d(t),p \right), \\
 \end{aligned}
 $$
+
 The model and varaible content is equal as above. The controller model only does not contain process and measurement noise.
 
 For more detail about the model predictive controller, the reader is referred to:
