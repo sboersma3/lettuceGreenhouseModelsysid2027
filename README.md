@@ -5,7 +5,7 @@ For questions reach out to: sjoerd.boersma@wur.nl
 ## Data 
 The benchmark data can be found in lettuceGreenhouseBenchmarkData.csv and the function plotBenchmarkData.py can be used to load and plot it.
 
-The data in lettuceGreenhouseBenchmarkData.csv contains 5 scenarios:
+The data in lettuceGreenhouseBenchmarkData.csv contains five 40-days scenarios:
 
 scenario	| $N_0$| 	date                | Mean temp	 |     Mean radiation
 ---|---|---|---|---
@@ -26,7 +26,7 @@ $$
 \end{aligned}
 $$
 
-with continuous time $t \in \mathbb{R}$, nonlinear functions $f(\cdot), g(\cdot)$, model parameter $p$ \in \mathbb{R}^{28}$ and 
+with continuous time $t \in \mathbb{R}$, nonlinear functions $f(\cdot), g(\cdot)$, model parameter $p \in \mathbb{R}^{28}$ and 
 
 variable|meaning|variable|meaning
 ---|---|---|---
