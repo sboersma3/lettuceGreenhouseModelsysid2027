@@ -25,26 +25,24 @@ u        = dfi[['u1','u2','u3']].to_numpy().T
 x        = dfi[['x1','x2','x3','x4']].to_numpy().T
 y        = dfi[['y1','y2','y3','y4']].to_numpy().T
 
-# convert outside Co2 and humidity to desired units for plotting
-dc       = np.zeros(d.shape)
-dc[0,:]  = d[0,:] 
-dc[1,:]  = lib.co2dens2ppm(d[2,:], d[1,:])*1e-3
-dc[2,:]  = d[2,:]
-dc[3,:]  = lib.vaporDens2rh(d[2,:], d[3,:])
 
+
+###############################################################################
+###############################################################################
+###############################################################################
 # plot
 y_labels = [
     r'$y_1$ (g/m$^2$)',
     r'$y_2$ (ppm) $\cdot 10^3$',
     r'$y_3$ ($^\circ$C)',
-    r'$y_4$ (\%)'
+    r'$y_4$ (%)'
 ]
 
 d_labels = [
     r'$d_1$ (W/m$^2$)',
-    r'$d_2$ (ppm) $\cdot 10^3$',
+    r'$d_2$ (kg/m$^3$)',
     r'$d_3$ ($^\circ$C)',
-    r'$d_4$ (\%)'
+    r'$d_4$ (kg/m$^3$)'
 ]
 
 u_labels = [
@@ -67,7 +65,7 @@ fig.suptitle(
 # Left column: disturbances d, followed by inputs u
 for ll in range(ops['nd']):
     a = ax[ll, 0]
-    a.plot(ops['t'] / c, dc[ll, :], drawstyle='steps')
+    a.plot(ops['t'] / c, d[ll, :], drawstyle='steps')
     a.set_ylabel(d_labels[ll], fontsize=18)
     a.grid(True)
 
