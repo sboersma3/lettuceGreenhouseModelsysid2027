@@ -26,19 +26,16 @@ $$
 \end{aligned}
 $$
 
-with
+with continuous time $t \in \mathbb{R}$, nonlinear functions $f(\cdot), g(\cdot)$, model parameter $p$ \in \mathbb{R}^{28}$ and 
 
-symbol|meaning|symbol|meaning
+variable|meaning|variable|meaning
 ---|---|---|---
 $d(t) \in \mathbb{R}^4$|weather disturbance|$x(t) \in \mathbb{R}^4$|state variable
 $u(t) \in \mathbb{R}^3$|control signal|$y(t) \in \mathbb{R}^{4}$|measurement
 $w(t)\in \mathbb{R}^4$|process noise | |
 $v(t)\in \mathbb{R}^{4}$|measurement noise | |
-$p$ \in \mathbb{R}^{28}$|model parameter | |
-$f(\cdot), g(\cdot)$|nonlinear functions | |
-$t \in \mathbb{R}$|continuous | |
 
-The meaning of the variables is defined below.
+The content of the variables is defined below.
 
 $d(t)$|$u(t)$|$x(t)$|$y(t)$
 ---|---|---|---
