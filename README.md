@@ -15,7 +15,7 @@ scenario	| $N_0$| 	date                | Mean temp	 |     Mean radiation
 4 (test) 		    |61344 | 2014-08-11 to 09-19	| 16.0 °C	 |     164    
 5 (train)		    |81504 | 2014-10-20 to 11-28	| 10.0 °C	 |     40     
 
-with $N_0$ the starting index of the weather data (disturbance) that can be found in outdoorWeatherWurGlas2014.mat.
+with $N_0$ the starting index of the weather data (disturbance) that can be found in data/outdoorWeatherWurGlas2014.mat.
 
 ## Model 
 This directory contains benchmark dataset and a dynamical lettuce greenhouse model that is used to generate the benchmark dataset. This data is for testing system identification methods.
