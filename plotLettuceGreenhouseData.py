@@ -1,4 +1,4 @@
-# function for loading and plotting benchmark data
+# function for loading and plotting lettuce greenhouse benchmark data
 
 # import user-defined help functions
 import library as lib 
