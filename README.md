@@ -3,7 +3,7 @@
 For questions reach out to: sjoerd.boersma@wur.nl
 
 ## Data 
-The benchmark data can be found in lettuceGreenhouseBenchmarkData.csv and the function plotBenchmarkData.py can be used to load and plot it.
+The benchmark data can be found in data/lettuceGreenhouseBenchmarkData.csv and the function plotBenchmarkData.py can be used to load and plot it.
 
 The data in lettuceGreenhouseBenchmarkData.csv contains five 40-days scenarios:
 
