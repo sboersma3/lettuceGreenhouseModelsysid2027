@@ -7,9 +7,8 @@ The benchmark data can be found in lettuceGreenhouseBenchmarkData.csv and the fu
 
 The data in lettuceGreenhouseBenchmarkData.csv contains 5 scenarios:
 
-   |   |   |   |
----|---|---|---|---
 scenario	| $N_0$| 	date                | Mean temp	 |     Mean radiation
+---|---|---|---|---
 1		    | 0	   | 2014-01-10 to 02-18	| 5.6 °C     |     37     
 2		    |20448 | 2014-03-22 to 04-30	| 11.2 °C	 |     161    
 3		    |40896 | 2014-06-01 to 07-10	| 16.2 °C	 |     232    
