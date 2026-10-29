@@ -9,20 +9,13 @@ The data in lettuceGreenhouseBenchmarkData.csv contains 5 scenarios:
 
 scenario	| $N_0$| 	date                | Mean temp	 |     Mean radiation
 ---|---|---|---|---
-1		    | 0	   | 2014-01-10 to 02-18	| 5.6 °C     |     37     
-2		    |20448 | 2014-03-22 to 04-30	| 11.2 °C	 |     161    
-3		    |40896 | 2014-06-01 to 07-10	| 16.2 °C	 |     232    
-4		    |61344 | 2014-08-11 to 09-19	| 16.0 °C	 |     164    
-5		    |81504 | 2014-10-20 to 11-28	| 10.0 °C	 |     40     
+1 (train)		    | 0	   | 2014-01-10 to 02-18	| 5.6 °C     |     37     
+2 (validation)		|20448 | 2014-03-22 to 04-30	| 11.2 °C	 |     161    
+3 (train)		    |40896 | 2014-06-01 to 07-10	| 16.2 °C	 |     232    
+4 (test) 		    |61344 | 2014-08-11 to 09-19	| 16.0 °C	 |     164    
+5 (train)		    |81504 | 2014-10-20 to 11-28	| 10.0 °C	 |     40     
 
-with $N_0$ the starting index of the weather data (disturbance) and:
-
-train      : scenarios 1,3,5
-
-validation : scenario 2
-
-test       : scenario 4
- 
+with $N_0$ the starting index of the weather data (disturbance).
 
 ## Model 
 This directory contains benchmark dataset and a dynamical lettuce greenhouse model that is used to generate the benchmark dataset. This data is for testing system identification methods.
