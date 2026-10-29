@@ -29,26 +29,17 @@ $$
 with
 
 symbol|meaning
----|---
-$x(t) \in \mathbb{R}^4$|state variable
-$y(t) \in \mathbb{R}^{4}$|measurement
-$u(t) \in \mathbb{R}^3$|control signal
-$d(t) \in \mathbb{R}^4$|weather disturbance
-$w(t)\in \mathbb{R}^4$|process noise 
-$v(t)\in \mathbb{R}^{4}$|measurement noise
-$p$ \in \mathbb{R}^{28}$|model parameter
-$f(\cdot), g(\cdot)$|nonlinear functions
-$t \in \mathbb{R}|continuous
+---|---|---|---
+$d(t) \in \mathbb{R}^4$|weather disturbance|$x(t) \in \mathbb{R}^4$|state variable
+$u(t) \in \mathbb{R}^3$|control signal|$y(t) \in \mathbb{R}^{4}$|measurement
+$w(t)\in \mathbb{R}^4$|process noise | |
+$v(t)\in \mathbb{R}^{4}$|measurement noise | |
+$p$ \in \mathbb{R}^{28}$|model parameter | |
+$f(\cdot), g(\cdot)$|nonlinear functions | |
+$t \in \mathbb{R}$|continuous | |
 
 The meaning of the variables is defined below.
 
-$x(t)$|$y(t)$
----|---
-dry weight (kg/m2)        | dry weight (g/m2)
-indoor CO2 (kg/m3)        | indoor CO2 (ppm)
-indoor temperature (deg)  | indoor temperature (g/m2)
-indoor humidity (kg/m3)   | indoor humidity (%)
- 
 $d(t)$|$u(t)$|$x(t)$|$y(t)$
 ---|---|---|---
 radiation (W/m2)          | CO2 injection (mg/m2/s) | dry weight (kg/m2)        | dry weight (g/m2)
