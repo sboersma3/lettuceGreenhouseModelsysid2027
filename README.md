@@ -28,7 +28,7 @@ $$
 
 with
 
-symbol|meaning
+symbol|meaning|symbol|meaning
 ---|---|---|---
 $d(t) \in \mathbb{R}^4$|weather disturbance|$x(t) \in \mathbb{R}^4$|state variable
 $u(t) \in \mathbb{R}^3$|control signal|$y(t) \in \mathbb{R}^{4}$|measurement
