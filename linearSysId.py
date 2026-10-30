@@ -47,7 +47,7 @@ df_val   = df[df['casus'] == 'validation']
 df_test  = df[df['casus'] == 'test']
 
 n_train  = df_train['scenario'].unique()
-h        = 900                              # sample period
+h        = df['t'].diff().median()
 
 T,D,U,X,Y,W  = [],[],[],[],[],[]
 for nn in n_train:           

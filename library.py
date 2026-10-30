@@ -123,7 +123,7 @@ def fd(x,u,d,p,h):
     k4  = f(x + h * k3,u,d,p,h)
     x   = x + h/6*(k1 + 2*k2 + 2*k3 + k4)
     
-    dx  = x * ( 1 + .007*rng.uniform(-1, 1, x.shape[0]) )
+    dx  = x * ( 1 + 0*.007*rng.uniform(-1, 1, x.shape[0]) )
     
     return dx
 
@@ -146,7 +146,7 @@ def f(x,u,d,p,h):
     
 def g(x,u,d,p,h):
     
-    y = np.array([1e3*x[0],1e-3*co2dens2ppm(x[2],x[1]), x[2], vaporDens2rh(x[2], x[3])]) * ( 1 + .0053*rng.uniform(-1, 1, x.shape[0]) )
+    y = np.array([1e3*x[0],1e-3*co2dens2ppm(x[2],x[1]), x[2], vaporDens2rh(x[2], x[3])]) * ( 1 + 0*.0053*rng.uniform(-1, 1, x.shape[0]) )
          
     return y
 

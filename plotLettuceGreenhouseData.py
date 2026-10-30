@@ -14,10 +14,17 @@ ops['nu'] = 3    # #controllable inputs
 ops['nd'] = 4    # #disturbance inputs
 c         = 86400   
 
-df  = pd.read_csv("data/LettuceGreenhouseBenchmarkData.csv")
+DF  = pd.read_csv("data/LettuceGreenhouseBenchmarkData.csv")
+
+# select one period of the data
+N0  = 10                        # start day
+N1  = min(20,DF["t"].max()/c)   # end day
+df  = DF[(DF["t"] >= N0 * 86400) & (DF["t"] <= N1 * 86400)].copy()
+
 
 nn  = len(df["scenario"].unique())
 dfi = df[df['scenario'] == np.random.randint(1,nn+1)]
+
 
 ops['t'] = dfi['t'].to_numpy()
 d        = dfi[['d1','d2','d3','d4']].to_numpy().T
@@ -106,5 +113,8 @@ for col in range(2):
     if visible_axes:
         visible_axes[-1].set_xlabel('Time (days)', fontsize=18)
 
+ax[ops['nx'] - 1, 1].tick_params(axis='x', labelbottom=True)
+
 # Reduce space above the first row
 fig.tight_layout(rect=[0, 0, 1, 0.985], pad=0.5, h_pad=0.5, w_pad=2)
+
