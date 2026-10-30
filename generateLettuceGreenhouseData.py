@@ -160,6 +160,8 @@ for col in range(2):
     if visible_axes:
         visible_axes[-1].set_xlabel('Time (days)', fontsize=18)
 
+ax[ops['nx'] - 1, 1].tick_params(axis='x', labelbottom=True)
+
 # Reduce space above the first row
 fig.tight_layout(rect=[0, 0, 1, 0.985], pad=0.5, h_pad=0.5, w_pad=2)
     

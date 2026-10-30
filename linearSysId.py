@@ -3,6 +3,7 @@ import library as lib
 
 # import other functions
 import numpy as np
+import matplotlib.pyplot as plt
 import pandas as pd
 import pysindy as ps
 
@@ -45,9 +46,9 @@ feature_names  = feature_names + ["u1(t)","u2(t)","u3(t)","d1(t)","d2(t)","d3(t)
 DF  = pd.read_csv('data/lettuceGreenhouseBenchmarkData.csv')
 
 # select one period of the data
-N0  = 10                        # start day
-N1  = min(20,DF["t"].max()/c)   # end day
-df  = DF[(DF["t"] >= N0 * 86400) & (DF["t"] <= N1 * 86400)].copy()
+N0  = 0                        # start day
+N1  = min(7,DF["t"].max()/c)   # end day
+df  = DF[(DF["t"] >= N0*86400) & (DF["t"] <= N1*86400)].copy()
 
 
 df_train = df[df['casus'] == 'train']
@@ -55,6 +56,8 @@ df_val   = df[df['casus'] == 'validation']
 df_test  = df[df['casus'] == 'test']
 
 n_train  = df_train['scenario'].unique()
+#n_train  = np.array([n_train[0]])          # pick one training scenario for testing
+N_train  = len(n_train) 
 h        = df['t'].diff().median()
 
 T,D,U,X,Y,W  = [],[],[],[],[],[]
@@ -85,109 +88,91 @@ model.fit(Y,u=W,t=h,feature_names=feature_names)
 # plot training data
 lib.plotTrainingData(D,U,X,Y,T,ops)
 
-# ###############################################################################
-# ###############################################################################
+###############################################################################
+###############################################################################
             
-# # test the model on training data
-# qq       = np.random.randint(ops['Ns'])
-# x        = X[qq]
-# y        = Y[qq]
-# u        = U[qq]
-# d        = D[qq]
-# w        = W[qq]
-# t        = T[qq]
-# h        = np.diff(t)
+# compare the model with one random scenario from the training data
+qq        = np.random.randint(N_train)
+t         = T[qq]
+d         = D[qq].T
+u         = U[qq].T
+x         = X[qq].T
+y         = Y[qq].T
+w         = W[qq].T
 
-# xhat           = np.zeros((ops['N']+1,ops['nx']))
-# xhat[0:Np+1,:] = y[0:Np+1,:]
+N         = d.shape[1]
+xhat      = np.zeros(x.shape)
+xhat[:,0] = y[:,0]
 
-# for kk in range(Np,ops['N']-1): # simulate the model numerically
+for kk in range(0,N-1): # simulate the model numerically using Euler
         
-#     xhat[kk+1,:]  = xhat[kk,:] + h[kk]*model.predict(xhat[[kk],:], w[kk,:])
+    xhat[:,kk+1]  = xhat[:,kk] + h*model.predict(xhat[:,[kk]].T, w[:,kk].T)
     
-    
-#     if Np>0:
-#         w[kk+1,0:ops['nx']] = xhat[kk+1,:]
-
-# yhat = xhat
+yhat = xhat
  
-# # plot validation on training data
-# lib.plotTrainingValidation(y,yhat,u,d,ops)
+lib.plotTrainingValidation(d,u,x,y,t,yhat,ops)
 
-# ###############################################################################
-# ###############################################################################
+###############################################################################
+###############################################################################
 
-# # test the model on test data
+# compare the model with test data
 
-# w           = np.column_stack((u.T,d.T))
-# x           = sol.y.T 
-# y           = np.vstack([x[:,0]*1e3, lib.co2dens2ppm(x[:,2],x[:,1]), x[:,2], lib.vaporDens2rh(x[:,2],x[:,3])]).T   
-# u           = u.T
-# d           = d.T
-# t           = sol.t
-# h           = np.diff(t)
+ops['t'] = df_test['t'].to_numpy()
+d        = df_test[['d1','d2','d3','d4']].to_numpy().T
+u        = df_test[['u1','u2','u3']].to_numpy().T
+x        = df_test[['x1','x2','x3','x4']].to_numpy().T
+y        = df_test[['y1','y2','y3','y4']].to_numpy().T
+w        = np.column_stack([u.T,d.T]).T
 
-# xhat           = np.zeros((ops['N']+1,ops['nx']))
-# xhat[0:Np+1,:] = y[0:Np+1,:]
+N         = d.shape[1]
+xhat      = np.zeros(x.shape)
+xhat[:,0] = y[:,0]
 
-# for kk in range(Np,ops['N']-1): # simulate the model numerically
+for kk in range(0,N-1): # simulate the model numerically using Euler
         
-#     xhat[kk+1,:]  = xhat[kk,:] + h[kk]*model.predict(xhat[[kk],:], w[kk,:])
+    xhat[:,kk+1]  = xhat[:,kk] + h*model.predict(xhat[:,[kk]].T, w[:,kk].T)
     
-    
-#     if Np>0:
-#         w[kk+1,0:ops['nx']] = xhat[kk+1,:]
+yhat = xhat
 
+lib.plotTestValidation(d,u,x,y,t,yhat,ops)
 
-# yhat = xhat
+###############################################################################
+###############################################################################
 
-# # plot validation on test data
-# lib.plotTestValidation(y,yhat,u,d,ops)
+# defeine linear state space matrices and compare with SINDy model's output 
 
+phat = model.coefficients()
+A    = phat[:,0:4]
+B    = phat[:,4:7]
+Bd   = phat[:,7:]
+C    = np.eye(ops['nx'])
+D    = np.zeros((ops['nx'],ops['nu']))
 
+xhat_      = np.zeros(x.shape)
+xhat_[:,0] = y[:,0]
 
-
-
-
-# ###############################################################################
-# ###############################################################################
-
-# phat = model.coefficients()
-# A    = phat[:,0:4]
-# B    = phat[:,4:7]
-# Bd   = phat[:,7:]
-# C    = np.eye(ops['nx'])
-# D    = np.zeros((ops['nx'],ops['nu']))
-
-# xhat_           = np.zeros((ops['N']+1,ops['nx']))
-# xhat_[0:Np+1,:] = y[0:Np+1,:]
-
-# for kk in range(Np,ops['N']-1): # simulate the model numerically
+for kk in range(0,N-1): # simulate the model numerically using Euler
         
-#     xhat_[kk+1,:]  = xhat_[kk,:] + h[kk]*( A.dot(xhat_[kk,:].T) + B.dot(u[kk,:].T) + Bd.dot(d[kk,:]) )
+    xhat_[:,kk+1]  = xhat_[:,kk] + h*( A.dot(xhat_[:,kk]) + B.dot(u[:,kk]) + Bd.dot(d[:,kk]) )
     
+yhat_ = xhat_
 
-# yhat_ = xhat_
-
-
-# fig, ax = plt.subplots(ops['nx'])
-# fig.set_size_inches(10.5, 10.5)
-# for ll in range(ops['nx']):
-#     ax[ll].plot(ops['t']/c,yhat[0:-1,ll], drawstyle='steps')
-#     ax[ll].plot(ops['t']/c,yhat_[0:-1,ll], drawstyle='steps', linestyle='--', color='red')
-#     ax[ll].grid(True)
-#     ax[ll].set_xlim(left=ops['t'][0], right=ops['t'][-1]/c)
-#     if ll==0:
-#         ax[ll].set_ylabel(r'$y_1$ (g/m$^2$)', fontsize=16)
-#         ax[ll].set_title(r'linear vs sindy model (should be equal)', fontsize=16)
-#     elif ll==1:
-#         ax[ll].set_ylabel(r'$y_2$ (ppm)', fontsize=16)
-#     elif ll==2:   
-#         ax[ll].set_ylabel(r'$y_3$ ($^\circ$C)', fontsize=16)
-#     elif ll==3:
-#         ax[ll].set_ylabel(r'$y_4$ (%)', fontsize=16)
-#         ax[ll].set_xlabel(r'Time (days)',fontsize=16) 
+fig, ax = plt.subplots(ops['nx'])
+fig.set_size_inches(10.5, 10.5)
+for ll in range(ops['nx']):
+    ax[ll].plot(ops['t']/c,yhat[ll,:], drawstyle='steps')
+    ax[ll].plot(ops['t']/c,yhat_[ll,:], drawstyle='steps', linestyle='--', color='red')
+    ax[ll].grid(True)
+    ax[ll].set_xlim(left=t[0], right=t[-1]/c)
+    if ll==0:
+        ax[ll].set_ylabel(r'$y_1$ (g/m$^2$)', fontsize=16)
+        ax[ll].set_title(r'state-space vs sindy model (should be equal)', fontsize=16)
+    elif ll==1:
+        ax[ll].set_ylabel(r'$y_2$ (ppm)', fontsize=16)
+    elif ll==2:   
+        ax[ll].set_ylabel(r'$y_3$ ($^\circ$C)', fontsize=16)
+    elif ll==3:
+        ax[ll].set_ylabel(r'$y_4$ (%)', fontsize=16)
+        ax[ll].set_xlabel(r'Time (days)',fontsize=16) 
 
 
-# ###############################################################################
-# ###############################################################################
