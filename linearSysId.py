@@ -12,6 +12,7 @@ ops       = {}
 ops['nx'] = 4    # #of states
 ops['nu'] = 3    # #controllable inputs
 ops['nd'] = 4    # #disturbance inputs
+c         = 86400 
     
 ###############################################################################
 ## lettuce greenhouse linear system identification using 
@@ -41,7 +42,14 @@ feature_names  = ["x1(t)","x2(t)","x3(t)","x4(t)"]
 feature_names  = feature_names + ["u1(t)","u2(t)","u3(t)","d1(t)","d2(t)","d3(t)","d4(t)"]
 
 ### load data
-df       = pd.read_csv('data/lettuceGreenhouseBenchmarkData.csv')
+DF  = pd.read_csv('data/lettuceGreenhouseBenchmarkData.csv')
+
+# select one period of the data
+N0  = 10                        # start day
+N1  = min(20,DF["t"].max()/c)   # end day
+df  = DF[(DF["t"] >= N0 * 86400) & (DF["t"] <= N1 * 86400)].copy()
+
+
 df_train = df[df['casus'] == 'train']
 df_val   = df[df['casus'] == 'validation']
 df_test  = df[df['casus'] == 'test']
