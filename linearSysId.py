@@ -49,7 +49,7 @@ DF  = pd.read_csv('data/lettuceGreenhouseBenchmarkData.csv')
 
 # select one period of the data
 N0  = 0                        # start day
-N1  = min(14,DF["t"].max()/c)   # end day
+N1  = min(7,DF["t"].max()/c)   # end day
 df  = DF[(DF["t"] >= N0*86400) & (DF["t"] <= N1*86400)].copy()
 
 

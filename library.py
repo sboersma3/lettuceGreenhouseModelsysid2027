@@ -615,6 +615,9 @@ def plotTrainingData(D,U,X,Y,T,ops):
     # Reduce space above the first row
     fig.tight_layout(rect=[0, 0, 1, 0.985], pad=0.5, h_pad=0.5, w_pad=2)
 
+    #plt.savefig("trainScenarios.svg", format="svg")
+    #plt.close()
+
 def plotTrainingValidation(d,u,x,y,t,yhat,ops):
  
     c        = 86400 
@@ -700,6 +703,9 @@ def plotTrainingValidation(d,u,x,y,t,yhat,ops):
     
     # Reduce space above the first row
     fig.tight_layout(rect=[0, 0, 1, 0.985], pad=0.5, h_pad=0.5, w_pad=2)
+
+    #plt.savefig("trainValidation.svg", format="svg")
+    #plt.close()
     
 def plotTestValidation(d,u,x,y,t,yhat,ops):
  
@@ -786,3 +792,6 @@ def plotTestValidation(d,u,x,y,t,yhat,ops):
     
     # Reduce space above the first row
     fig.tight_layout(rect=[0, 0, 1, 0.985], pad=0.5, h_pad=0.5, w_pad=2)
+    
+    #plt.savefig("TestValidation.svg", format="svg")
+    #plt.close()
