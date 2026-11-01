@@ -74,8 +74,8 @@ df.to_csv("data/lettuceGreenhouseBenchmarkData_.csv", index=False)
 ###############################################################################
 ###############################################################################
 ###############################################################################
-
-dfi = df[df['scenario'] == np.random.randint(1,nn+1)]
+if nn>0:
+    dfi = df[df['scenario'] == np.random.randint(1,nn+1)]
 
 ops['t'] = dfi['t'].to_numpy()
 d        = dfi[['d1','d2','d3','d4']].to_numpy().T
