@@ -17,7 +17,6 @@ def modelParameter():
     p = {'satH2O1': 9348} 		    # saturation water vapour parameter 			[J m^{-3}] 				9348
     p['satH2O2'] = 17.4 			# saturation water vapour parameter 			[-] 					17.4
     p['satH2O3'] = 239 		        # saturation water vapour parameter 			[°C] 					239
-    p['satH2O4'] = 10998  	        # saturation water vapour parameter 			[J m^{-3}] 				10998
     p['R'] = 8314 					# ideal gas constant 							[J K^{-1} kmol^{-1}] 	8314
     p['T'] = 273.15 				# conversion from C to K 						[K] 					273.15
 
