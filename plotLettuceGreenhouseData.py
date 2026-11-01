@@ -206,5 +206,5 @@ ax[ops['nx'] - 1, 1].tick_params(axis='x', labelbottom=True)
 # Reduce space above the first row
 fig.tight_layout(rect=[0, 0, 1, 0.985], pad=0.5, h_pad=0.5, w_pad=2)
 
-plt.savefig("allScenarios.svg", format="svg")
-plt.close()
+#plt.savefig("allScenarios.svg", format="svg")
+#plt.close()

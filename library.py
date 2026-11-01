@@ -38,11 +38,18 @@ def modelParameter():
     p['photCO2_3'] =6.29e-4 		# temperature influence on photosynthesis 		[m s^{-1}] 				6.29e-4
     p['photGamma'] = 5.2e-5 		# carbon dioxide compensation point 			[kg{CO2} m^{-3}{air}] 	5.2e-5
     p['evap_c_a'] = 3.6e-3 		    # coefficient of leaf-air vapor flow 			[m s^{-1}] 				3.6e-3
+
+    p['P']     = 101325             # pressure (1 atm)                      [Pa]
+    p['M_CO2'] = 44.01              # molar mass of CO2                     [kg kmol^-1]
+    p['M_H2O'] = 18.01528           # molar mass of water                   [kg kmol^-1]
+    p['satP1'] = 610.78             # saturation vapour pressure parameter  [Pa]
+    p['satP2'] = 17.2694            # saturation vapour pressure parameter  [-]
+    p['satP3'] = 238.3              # saturation vapour pressure parameter  [°C]
        
     return p
 
 
-def disturbance(ops):
+def disturbance(ops,p):
 
     c       = 86400
     nDays   = ops['L']/c                        # number of days in the simulation
@@ -70,20 +77,20 @@ def disturbance(ops):
        print('Increase ops[h], sample period too small.')
        print(' ')
     
-    # new sample period p times the original sample rate
-    p       = math.floor(1/(dt/ops['h']))
+    # new sample period q times the original sample rate
+    q       = math.floor(1/(dt/ops['h']))
     
-    rad     = D[N0:N0+Ns+p*ops['Np'],1]          # Outdoor Global radiation [W m^{-2}]
-    tempOut = D[N0:N0+Ns+p*ops['Np'],2]          # Outdoor temperature [°C]
-    co2Out  = D[N0:N0+Ns+p*ops['Np'],5]          # Outdoor CO2 concentration [ppm]
-    co2Out  = co2ppm2dens(tempOut,co2Out)        # Outdoor CO2 concentration [kg/m3]
-    vapOut  = D[N0:N0+Ns+p*ops['Np'],3]          # Outdoor relative humidity [#]
-    vapOut  = rh2vaporDens(tempOut,vapOut)       # Outdoor humidity [kg/m3]
+    rad     = D[N0:N0+Ns+q*ops['Np'],1]          # Outdoor Global radiation [W m^{-2}]
+    tempOut = D[N0:N0+Ns+q*ops['Np'],2]          # Outdoor temperature [°C]
+    co2Out  = D[N0:N0+Ns+q*ops['Np'],5]          # Outdoor CO2 concentration [ppm]
+    co2Out  = co2ppm2dens(tempOut,co2Out,p)      # Outdoor CO2 concentration [kg/m3]
+    vapOut  = D[N0:N0+Ns+q*ops['Np'],3]          # Outdoor relative humidity [#]
+    vapOut  = rh2vaporDens(tempOut,vapOut,p)     # Outdoor humidity [kg/m3]
         
     # model: d(0) = rad, d(1) = co2Out, d(2) = tempOut, d(3) = vapOut
     d0              = np.array([rad[0], co2Out[0], tempOut[0], vapOut[0]])
     
-    ns              = math.ceil(len(rad)/p)
+    ns              = math.ceil(len(rad)/q)
     d               = np.zeros((ops['nd'],ns))
             
     d[0,:]          = signal.resample(rad-d0[0],ns)+d0[0]  
@@ -144,71 +151,37 @@ def f(x,u,d,p,h):
     return ki
     
 def g(x,u,d,p,h):
-    
-    y = np.array([1e3*x[0],1e-3*co2dens2ppm(x[2],x[1]), x[2], vaporDens2rh(x[2], x[3])]) * ( 1 + .0053*rng.uniform(-1, 1, x.shape[0]) )
-         
+
+    y = np.array([1e3*x[0],
+                  1e-3*co2dens2ppm(x[2],x[1],p),
+                  x[2],
+                  vaporDens2rh(x[2],x[3],p)]) * ( 1 + .0053*rng.uniform(-1, 1, x.shape[0]) )
     return y
 
-def rh2vaporDens(temp,rh):
-   
-    # constants
-    R = 8.3144598 # molar gas constant [J mol^{-1} K^{-1}]
-    C2K = 273.15 # conversion from Celsius to Kelvin [K]
-    Mw = 18.01528e-3 # molar mass of water [kg mol^-{1}]
+def satVaporPressure(temp, p):
+    # saturation vapour pressure of air at temperature temp [Pa]
+    return p['satP1']*np.exp(p['satP2']*np.divide(temp,(temp+p['satP3'])))
 
-    # parameters used in the conversion
-    c = np.array([610.78, 238.3, 17.2694, -6140.4, 273, 28.916])
-    satP = c[0]*np.exp(c[2]*np.divide(temp,(temp+c[1]))) 
-    # Saturation vapor pressure of air in given temperature [Pa]   
-    pascals=(rh/100)*satP # Partial pressure of vapor in air [Pa]
-    # convert to density using the ideal gas law pV=nRT => n=pV/RT 
-    # so n=p/RT is the number of moles in a m^3, and Mw*n=Mw*p/(R*T) is the 
-    # number of kg in a m^3, where Mw is the molar mass of water.
-    vaporDens = np.divide(pascals*Mw,(R*(temp+C2K)))
-        
+def rh2vaporDens(temp, rh, p):
+    pascals   = (rh/100)*satVaporPressure(temp, p)     # partial pressure of vapour [Pa]
+    # ideal gas law: density = p*M/(R*T)
+    vaporDens = np.divide(pascals*p['M_H2O'], p['R']*(temp+p['T']))
     return vaporDens
-   
-def vaporDens2rh(temp,vaporDens):
-      
-    # constants
-    R = 8.3144598 # molar gas constant [J mol^{-1} K^{-1}]
-    C2K = 273.15 # conversion from Celsius to Kelvin [K]
-    Mw = 18.01528e-3 # molar mass of water [kg mol^-{1}]
 
-    # parameters used in the conversion
-    c = np.array([610.78, 238.3, 17.2694, -6140.4, 273, 28.916])  
-    satP = c[0]*np.exp(c[2]*np.divide(temp,(temp+c[1]))) 
-    # Saturation vapor pressure of air in given temperature [Pa]      
-    # convert to relative humidity using the ideal gas law pV=nRT => n=pV/RT 
-    # so n=p/RT is the number of moles in a m^3, and Mw*n=Mw*p/(R*T) is the 
-    # number of kg in a m^3, where Mw is the molar mass of water.    
-    if isinstance(temp, float) or isinstance(temp, int) : 
-        rh = min(100.0,np.divide(100*R*(temp+C2K),(Mw*satP))*vaporDens)
+def vaporDens2rh(temp, vaporDens, p):
+    satP = satVaporPressure(temp, p)
+    if isinstance(temp, float) or isinstance(temp, int) :
+        rh = min(100.0, np.divide(100*p['R']*(temp+p['T']), p['M_H2O']*satP)*vaporDens)
     else:
-        rh = np.divide(100*R*(temp+C2K),(Mw*satP))*vaporDens
-    
+        rh = np.divide(100*p['R']*(temp+p['T']), p['M_H2O']*satP)*vaporDens
     return rh
 
-def co2dens2ppm(temp,dens):
-        
-    R = 8.3144598 # molar gas constant [J mol^{-1} K^{-1}]
-    C2K = 273.15 # conversion from Celsius to Kelvin [K]
-    M_CO2 = 44.01e-3 # molar mass of CO2 [kg mol^-{1}]
-    P = 101325 # pressure (assumed to be 1 atm) [Pa]   
-    ppm = 1e6*R*(temp+C2K)*dens/(P*M_CO2)
-    
+def co2dens2ppm(temp, dens, p):
+    ppm = 1e6*p['R']*(temp+p['T'])*dens/(p['P']*p['M_CO2'])
     return ppm
 
-def co2ppm2dens(temp, ppm):
-            
-    R = 8.3144598 # molar gas constant [J mol^{-1} K^{-1}]
-    C2K = 273.15 # conversion from Celsius to Kelvin [K]
-    M_CO2 = 44.01e-3 # molar mass of CO2 [kg mol^-{1}]
-    P = 101325 # pressure (assumed to be 1 atm) [Pa]   
-    # number of moles n=m/M_CO2 where m is the mass [kg] and M_CO2 is the
-    # molar mass [kg mol^{-1}]. So m=p*V*M_CO2*P/RT where V is 10^-6*ppm    
-    co2Dens = np.divide(P*1e-6*ppm*M_CO2,(R*(temp+C2K)))
-    
+def co2ppm2dens(temp, ppm, p):
+    co2Dens = np.divide(p['P']*1e-6*ppm*p['M_CO2'], p['R']*(temp+p['T']))
     return co2Dens
 
 ###############################################################################
@@ -235,10 +208,10 @@ def fdhat(x,u,d,p,h):
     # u(2)    = u.vent
     # u(3)    = u.heat
     
-    k1  = f(x,u,d,p,h)
-    k2  = f(x + h/2 * k1,u,d,p,h)
-    k3  = f(x + h/2 * k2,u,d,p,h)
-    k4  = f(x + h * k3,u,d,p,h)
+    k1  = fhat(x,u,d,p,h)
+    k2  = fhat(x + h/2 * k1,u,d,p,h)
+    k3  = fhat(x + h/2 * k2,u,d,p,h)
+    k4  = fhat(x + h * k3,u,d,p,h)
     x   = x + h/6*(k1 + 2*k2 + 2*k3 + k4)
     
     dx  = x
@@ -264,7 +237,7 @@ def fhat(x,u,d,p,h):
     
 def ghat(x,u,d,p,h):
     
-    y = np.array([1e3*x[0],1e-3*co2dens2ppm(x[2],x[1]), x[2], vaporDens2rh(x[2], x[3])])
+    y = np.array([1e3*x[0],1e-3*co2dens2ppm(x[2],x[1],p), x[2], vaporDens2rh(x[2],x[3],p)])
          
     return y
 
@@ -293,7 +266,7 @@ def initMpc(p,ops):
     tempMax = 40                           # upper bound on temperature                    [°C]                    40
     rhMin = 0                              # lower bound on relative humidity              [#]                     0
     rhMax = 70                             # upper bound on relative humidity              [#]                     90
-    ahMax = rh2vaporDens(tempMax,rhMax)    # upper bound on vapor density                  [kg/m^{-3}]                     
+    ahMax = rh2vaporDens(tempMax,rhMax,p)  # upper bound on vapor density                  [kg/m^{-3}]                     
     
     # state constraints vector
     ops['x_min']   = np.array([WMin, co2Min, tempMin, rhMin])
@@ -301,7 +274,7 @@ def initMpc(p,ops):
     
     # output constraints vector
     ops['y_min']   = np.array([WMin, co2Min, tempMin, rhMin])
-    ops['y_max']   = np.array([WMax, co2dens2ppm(tempMax,co2Max)/1e3, tempMax, vaporDens2rh(tempMax,ahMax)])
+    ops['y_max']   = np.array([WMax, co2dens2ppm(tempMax,co2Max,p)/1e3, tempMax, vaporDens2rh(tempMax,ahMax,p)])
     ops['y_min_k'] = []
     ops['y_max_k'] = []
     
