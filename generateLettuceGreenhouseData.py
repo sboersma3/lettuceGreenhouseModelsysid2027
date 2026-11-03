@@ -7,9 +7,9 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 df    = []
-N0    = np.array([0, 20448, 40896, 61334, 81504])          # initial samples different scenarios
-#N0    = np.array([0])                                      # pick one scenario scenarios
-casus = ['train','validation','train','test','train']      # case corresponding to element in N0
+N0    = np.array([0, 20448, 40896, 61334, 81504])                                                   # initial samples different scenarios
+#N0    = np.array([0])                                                                              # pick one scenario scenarios
+casus = ['train/validation','train/validation','train/validation','test','train/validation']        # case corresponding to element in N0
 for nn in range(len(N0)):
     
     dfi   = pd.DataFrame(columns=['scenario', 'casus', 't', 'd1', 'd2', 'd3', 'd4', 'u1', 'u2', 'u3', 'x1', 'x2', 'x3', 'x4', 'y1', 'y2', 'y3', 'y4'])
@@ -24,7 +24,7 @@ for nn in range(len(N0)):
     
     # simulation parameters
     c         = 86400
-    nDays     = 40                                      # #days in simulation (max = 46 weeks)
+    nDays     = 40                                       # #days in simulation (max = 46 weeks)
     ops['h']  = 15*60                                   # sample period in seconds: #minutes*60
     ops['L']  = nDays*c                                 # final time simulation
     ops['t']  = np.arange(0,ops['L']+ops['h'],ops['h']) # initial time vector

@@ -126,7 +126,7 @@ fig.tight_layout(rect=[0, 0, 1, 0.985], pad=0.5, h_pad=0.5, w_pad=2)
 
 fig, ax = plt.subplots(nrows, 2, figsize=(16, 2 * nrows), sharex=True)
 
-fig.suptitle("all scenarios", fontsize=23, y=0.99)
+#fig.suptitle("all scenarios", fontsize=23, y=0.99)
 
 scenarios = np.sort(df['scenario'].unique())             # every scenario in the data
 colors    = plt.cm.tab10(np.arange(len(scenarios)) % 10) 
