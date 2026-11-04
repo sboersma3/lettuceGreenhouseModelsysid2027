@@ -129,7 +129,7 @@ def fd(x,u,d,p,h):
     k4  = f(x + h * k3,u,d,p,h)
     x   = x + h/6*(k1 + 2*k2 + 2*k3 + k4)
     
-    dx  = x * ( 1 + .01*rng.uniform(-1, 1, x.shape[0]) )
+    dx  = x * ( 1 + .005*rng.uniform(-1, 1, x.shape[0]) )
     
     return dx
 
@@ -155,7 +155,7 @@ def g(x,u,d,p,h):
     y = np.array([1e3*x[0],
                   1e-3*co2dens2ppm(x[2],x[1],p),
                   x[2],
-                  vaporDens2rh(x[2],x[3],p)]) * ( 1 + .01*rng.uniform(-1, 1, x.shape[0]) )
+                  vaporDens2rh(x[2],x[3],p)]) * ( 1 + .005*rng.uniform(-1, 1, x.shape[0]) )
     return y
 
 def satVaporPressure(temp, p):

@@ -14,7 +14,7 @@ ops['nu'] = 3    # #controllable inputs
 ops['nd'] = 4    # #disturbance inputs
 c         = 86400   
 
-DF  = pd.read_csv("data/LettuceGreenhouseBenchmarkData.csv")
+DF  = pd.read_csv("data/LettuceGreenhouseBenchmarkData_005.csv")
 
 # select one period of the data
 N0  = 0                        # start day
