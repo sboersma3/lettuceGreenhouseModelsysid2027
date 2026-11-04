@@ -24,7 +24,7 @@ for nn in range(len(N0)):
     
     # simulation parameters
     c         = 86400
-    nDays     = 40                                       # #days in simulation (max = 46 weeks)
+    nDays     = 40                                      # #days in simulation (max = 46 weeks)
     ops['h']  = 15*60                                   # sample period in seconds: #minutes*60
     ops['L']  = nDays*c                                 # final time simulation
     ops['t']  = np.arange(0,ops['L']+ops['h'],ops['h']) # initial time vector
@@ -65,7 +65,7 @@ for nn in range(len(N0)):
     
 df = pd.concat(df,ignore_index=True)
 
-df.to_csv("data/lettuceGreenhouseBenchmarkData_005.csv", index=False)
+#df.to_csv("data/lettuceGreenhouseBenchmarkData_005.csv", index=False)
 
 
 
@@ -87,7 +87,7 @@ y        = dfi[['y1','y2','y3','y4']].to_numpy().T
 # plot
 y_labels = [
     r'$y_1$ (g/m$^2$)',
-    r'$y_2$ (ppm) $\cdot 10^3$',
+    r'$y_2$ (ppm) $\cdot 10^2$',
     r'$y_3$ ($^\circ$C)',
     r'$y_4$ (%)'
 ]

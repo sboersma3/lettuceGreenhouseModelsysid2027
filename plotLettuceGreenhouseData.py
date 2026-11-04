@@ -14,11 +14,11 @@ ops['nu'] = 3    # #controllable inputs
 ops['nd'] = 4    # #disturbance inputs
 c         = 86400   
 
-DF  = pd.read_csv("data/LettuceGreenhouseBenchmarkData_005.csv")
+DF  = pd.read_csv("data/lettuceGreenhouseBenchmarkData_005.csv")
 
 # select one period of the data
 N0  = 0                        # start day
-N1  = min(40,DF["t"].max()/c)   # end day
+N1  = min(7,DF["t"].max()/c)   # end day
 df  = DF[(DF["t"] >= N0 * 86400) & (DF["t"] <= N1 * 86400)].copy()
 
 
@@ -40,7 +40,7 @@ y        = dfi[['y1','y2','y3','y4']].to_numpy().T
 # plot one random scenario
 y_labels = [
     r'$y_1$ (g/m$^2$)',
-    r'$y_2$ (ppm) $\cdot 10^3$',
+    r'$y_2$ (ppm) $\cdot 10^2$',
     r'$y_3$ ($^\circ$C)',
     r'$y_4$ (%)'
 ]

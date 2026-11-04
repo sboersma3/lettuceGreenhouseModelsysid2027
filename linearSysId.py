@@ -45,7 +45,7 @@ feature_names  = ["x1(t)","x2(t)","x3(t)","x4(t)"]
 feature_names  = feature_names + ["u1(t)","u2(t)","u3(t)","d1(t)","d2(t)","d3(t)","d4(t)"]
 
 ### load data
-DF  = pd.read_csv('data/lettuceGreenhouseBenchmarkData.csv')
+DF  = pd.read_csv('data/lettuceGreenhouseBenchmarkData_005.csv')
 
 # select one period of the data
 N0  = 0                        # start day
@@ -137,10 +137,17 @@ yhat = xhat
 
 lib.plotTestValidation(d,u,x,y,t,yhat,ops)
 
+fit_i = 100*(1 - np.linalg.norm(y - yhat, axis=1) /
+                 np.linalg.norm(y - y.mean(axis=1, keepdims=True), axis=1))
+rmse_i = np.sqrt(np.mean((y - yhat)**2, axis=1))
+
+print(np.array2string(rmse_i, precision=2, suppress_small=True))
+print(np.array2string(fit_i, precision=2, suppress_small=True))
+
 ###############################################################################
 ###############################################################################
 
-# defeine linear state space matrices and compare with SINDy model's output 
+# define linear state space matrices and compare with SINDy model's output 
 
 phat = model.coefficients()
 A    = phat[:,0:4]
@@ -148,7 +155,7 @@ B    = phat[:,4:7]
 Bd   = phat[:,7:]
 C    = np.eye(ops['nx'])
 D    = np.zeros((ops['nx'],ops['nu']))
-
+'''
 xhat_      = np.zeros(x.shape)
 xhat_[:,0] = y[:,0]
 
@@ -169,11 +176,11 @@ for ll in range(ops['nx']):
         ax[ll].set_ylabel(r'$y_1$ (g/m$^2$)', fontsize=16)
         ax[ll].set_title(r'state-space vs sindy model (should be equal)', fontsize=16)
     elif ll==1:
-        ax[ll].set_ylabel(r'$y_2$ (ppm)', fontsize=16)
+        ax[ll].set_ylabel(r'$y_2$ (ppm) $\cdot 10^2$', fontsize=16)
     elif ll==2:   
         ax[ll].set_ylabel(r'$y_3$ ($^\circ$C)', fontsize=16)
     elif ll==3:
         ax[ll].set_ylabel(r'$y_4$ (%)', fontsize=16)
         ax[ll].set_xlabel(r'Time (days)',fontsize=16) 
-
+'''
 

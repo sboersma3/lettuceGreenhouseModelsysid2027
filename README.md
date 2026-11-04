@@ -40,7 +40,7 @@ The content of the variables is defined below.
 $d(t)$|$u(t)$|$x(t)$|$y(t)$
 ---|---|---|---
 radiation (W/m2)          | CO2 injection (mg/m2/s) | dry weight (kg/m2)        | dry weight (g/m2)
-outdoor CO2 (kg/m3)       | ventilation (mm/s) | indoor CO2 (kg/m3)        | indoor CO2 (ppm)
+outdoor CO2 (kg/m3)       | ventilation (mm/s) | indoor CO2 (kg/m3)        | indoor CO2 (ppm) $\cdot 10^2$
 outdoor temperature (deg) | heating (W/m2) | indoor temperature (deg)  | indoor temperature (g/m2)
 outdoor humidity (kg/m3)  | | indoor humidity (kg/m3)   | indoor humidity (%)
 

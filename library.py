@@ -153,7 +153,7 @@ def f(x,u,d,p,h):
 def g(x,u,d,p,h):
 
     y = np.array([1e3*x[0],
-                  1e-3*co2dens2ppm(x[2],x[1],p),
+                  1e-2*co2dens2ppm(x[2],x[1],p),
                   x[2],
                   vaporDens2rh(x[2],x[3],p)]) * ( 1 + .005*rng.uniform(-1, 1, x.shape[0]) )
     return y
@@ -237,7 +237,7 @@ def fhat(x,u,d,p,h):
     
 def ghat(x,u,d,p,h):
     
-    y = np.array([1e3*x[0],1e-3*co2dens2ppm(x[2],x[1],p), x[2], vaporDens2rh(x[2],x[3],p)])
+    y = np.array([1e3*x[0],1e-2*co2dens2ppm(x[2],x[1],p), x[2], vaporDens2rh(x[2],x[3],p)])
          
     return y
 
@@ -274,7 +274,7 @@ def initMpc(p,ops):
     
     # output constraints vector
     ops['y_min']   = np.array([WMin, co2Min, tempMin, rhMin])
-    ops['y_max']   = np.array([WMax, co2dens2ppm(tempMax,co2Max,p)/1e3, tempMax, vaporDens2rh(tempMax,ahMax,p)])
+    ops['y_max']   = np.array([WMax, co2dens2ppm(tempMax,co2Max,p)/1e2, tempMax, vaporDens2rh(tempMax,ahMax,p)])
     ops['y_min_k'] = []
     ops['y_max_k'] = []
     
@@ -482,7 +482,7 @@ def plotTrainingData(D,U,X,Y,T,ops):
     
     y_labels = [
         r'$y_1$ (g/m$^2$)',
-        r'$y_2$ (ppm) $\cdot 10^3$',
+        r'$y_2$ (ppm) $\cdot 10^2$',
         r'$y_3$ ($^\circ$C)',
         r'$y_4$ (%)'
     ]
@@ -596,7 +596,7 @@ def plotTrainingValidation(d,u,x,y,t,yhat,ops):
     
     y_labels = [
         r'$y_1$ (g/m$^2$)',
-        r'$y_2$ (ppm) $\cdot 10^3$',
+        r'$y_2$ (ppm) $\cdot 10^2$',
         r'$y_3$ ($^\circ$C)',
         r'$y_4$ (%)'
     ]
@@ -620,7 +620,7 @@ def plotTrainingValidation(d,u,x,y,t,yhat,ops):
     fig, ax = plt.subplots(nrows, 2, figsize=(16, 2 * nrows), sharex=True)
     
     fig.suptitle(
-        "comparison of one random scenario from training data: model (red) and data (blue)",
+        "comparison of one random training/validation scenario: model (red) and data (blue)",
         fontsize=23,
         y=0.99
     )
@@ -685,7 +685,7 @@ def plotTestValidation(d,u,x,y,t,yhat,ops):
     
     y_labels = [
         r'$y_1$ (g/m$^2$)',
-        r'$y_2$ (ppm) $\cdot 10^3$',
+        r'$y_2$ (ppm) $\cdot 10^2$',
         r'$y_3$ ($^\circ$C)',
         r'$y_4$ (%)'
     ]
@@ -709,7 +709,7 @@ def plotTestValidation(d,u,x,y,t,yhat,ops):
     fig, ax = plt.subplots(nrows, 2, figsize=(16, 2 * nrows), sharex=True)
     
     fig.suptitle(
-        "comparison of scenario from test data: model (red) and data (blue)",
+        "comparison test scenario with linear model: model (red) and data (blue)",
         fontsize=23,
         y=0.99
     )
@@ -765,5 +765,25 @@ def plotTestValidation(d,u,x,y,t,yhat,ops):
     # Reduce space above the first row
     fig.tight_layout(rect=[0, 0, 1, 0.985], pad=0.5, h_pad=0.5, w_pad=2)
     
+    
+    fig, ax = plt.subplots(ops['nx'])
+    fig.set_size_inches(10.5, 10.5)
+    for ll in range(ops['nx']):
+        ax[ll].plot(t/c,y[ll,:], drawstyle='steps')
+        ax[ll].plot(t/c,yhat[ll,:], drawstyle='steps', linestyle='--', color='red')
+        ax[ll].grid(True)
+        ax[ll].set_xlim(left=t[0], right=t[-1]/c)
+        if ll==0:
+            ax[ll].set_ylabel(r'$y_1$ (g/m$^2$)', fontsize=16)
+            ax[ll].set_title(r'comparison test scenario with linear model: model (red) and data (blue)', fontsize=16)
+        elif ll==1:
+            ax[ll].set_ylabel(r'$y_2$ (ppm) $\cdot 10^2$', fontsize=16)
+        elif ll==2:   
+            ax[ll].set_ylabel(r'$y_3$ ($^\circ$C)', fontsize=16)
+        elif ll==3:
+            ax[ll].set_ylabel(r'$y_4$ (%)', fontsize=16)
+            ax[ll].set_xlabel(r'Time (days)',fontsize=16)
+            
+            
     #plt.savefig("TestValidation.svg", format="svg")
     #plt.close()
