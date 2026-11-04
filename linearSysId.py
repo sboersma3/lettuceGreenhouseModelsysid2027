@@ -45,7 +45,7 @@ feature_names  = ["x1(t)","x2(t)","x3(t)","x4(t)"]
 feature_names  = feature_names + ["u1(t)","u2(t)","u3(t)","d1(t)","d2(t)","d3(t)","d4(t)"]
 
 ### load data
-DF  = pd.read_csv('data/lettuceGreenhouseBenchmarkData_005.csv')
+DF  = pd.read_csv('data/lettuceGreenhouseBenchmarkData.csv')
 
 # select one period of the data
 N0  = 0                        # start day
