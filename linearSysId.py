@@ -53,8 +53,7 @@ N1  = min(40,DF["t"].max()/c)   # end day
 df  = DF[(DF["t"] >= N0*86400) & (DF["t"] <= N1*86400)].copy()
 
 
-df_train = df[df['casus'] == 'train']
-df_val   = df[df['casus'] == 'validation']
+df_train = df[df['casus'] == 'train/validation']
 df_test  = df[df['casus'] == 'test']
 
 n_train  = df_train['scenario'].unique()
