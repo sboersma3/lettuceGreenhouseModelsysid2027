@@ -1,0 +1,24 @@
+# Python packages used by the scripts in this repository.
+# Tested with Python 3.12 and: numpy 2.5.4, scipy 1.18.1, pandas 3.1.1,
+# matplotlib 3.11.2, casadi 3.8.2, pysindy 2.1.0, scikit-learn 1.8.0, torch 2.15.0.
+
+numpy
+scipy
+pandas
+matplotlib
+casadi
+
+# linearSysId.py uses the pysindy 2.x interface.
+pysindy>=2.0
+
+# Keep scikit-learn below 1.9 to reproduce the linear baseline (linearSysId.py).
+# The regression is ill-conditioned, and pysindy's STLSQ ends with a
+# scikit-learn LinearRegression fit. From scikit-learn 1.9 on, LinearRegression
+# uses a larger singular-value cut-off (tol=1e-6), which drops the weakest
+# direction of the regressor matrix and changes the identified model:
+#   scikit-learn <= 1.8 : RMSE [19.23, 0.81, 0.75, 6.92],  FIT [81.98, -145.00, 78.90, 4.54] %
+#   scikit-learn 1.9.1  : RMSE [17.40, 1.12, 1.07, 20.35], FIT [83.70, -238.06, 69.62, -180.75] %
+scikit-learn<1.9
+
+# nonlinearSysId.py
+torch

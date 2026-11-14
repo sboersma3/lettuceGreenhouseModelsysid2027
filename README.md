@@ -2,8 +2,11 @@
 
 For questions reach out to: sjoerd.boersma@wur.nl
 
+## Requirements
+The scripts were tested with Python 3.12 and the packages listed in requirements.txt (`pip install -r requirements.txt`). Note that scikit-learn must be older than 1.9 to reproduce the linear baseline; see the comment in requirements.txt.
+
 ## Data 
-The benchmark data can be found in data/lettuceGreenhouseBenchmarkData.csv and the function plotBenchmarkData.py can be used to load and plot it.
+The benchmark data can be found in data/lettuceGreenhouseBenchmarkData.csv and the script plotLettuceGreenhouseData.py can be used to load and plot it.
 
 The data in lettuceGreenhouseBenchmarkData.csv contains five 40-days scenarios:
 
@@ -12,7 +15,7 @@ scenario	| $N_0$| 	date                | Mean temp	 |     Mean radiation
 1 (train/validation)		    | 0	   | 2014-01-10 to 02-18	| 5.6 °C     |     37     
 2 (train/validation)		|20448 | 2014-03-22 to 04-30	| 11.2 °C	 |     161    
 3 (train/validation)		    |40896 | 2014-06-01 to 07-10	| 16.2 °C	 |     232    
-4 (test) 		    |61344 | 2014-08-11 to 09-19	| 16.0 °C	 |     164    
+4 (test) 		    |61334 | 2014-08-11 to 09-19	| 16.0 °C	 |     164    
 5 (train/validation)		    |81504 | 2014-10-20 to 11-28	| 10.0 °C	 |     40     
 
 with $N_0$ the starting index of the weather data (disturbance) that can be found in data/outdoorWeatherWurGlas2014.mat.
@@ -41,7 +44,7 @@ $d(t)$|$u(t)$|$x(t)$|$y(t)$
 ---|---|---|---
 radiation (W/m2)          | CO2 injection (mg/m2/s) | dry weight (kg/m2)        | dry weight (g/m2)
 outdoor CO2 (kg/m3)       | ventilation (mm/s) | indoor CO2 (kg/m3)        | indoor CO2 (ppm) $\cdot 10^2$
-outdoor temperature (deg) | heating (W/m2) | indoor temperature (deg)  | indoor temperature (g/m2)
+outdoor temperature (deg) | heating (W/m2) | indoor temperature (deg)  | indoor temperature (deg)
 outdoor humidity (kg/m3)  | | indoor humidity (kg/m3)   | indoor humidity (%)
 
 For more detail about the model, the reader is referred to:

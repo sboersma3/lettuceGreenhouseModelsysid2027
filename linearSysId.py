@@ -93,7 +93,7 @@ lib.plotTrainingData(D,U,X,Y,T,ops)
 ###############################################################################
             
 # compare the model with one random scenario from the training data
-qq        = np.random.randint(N_train)
+qq        = rng.integers(N_train)
 t         = T[qq]
 d         = D[qq].T
 u         = U[qq].T
@@ -155,7 +155,7 @@ B    = phat[:,4:7]
 Bd   = phat[:,7:]
 C    = np.eye(ops['nx'])
 D    = np.zeros((ops['nx'],ops['nu']))
-'''
+r'''
 xhat_      = np.zeros(x.shape)
 xhat_[:,0] = y[:,0]
 

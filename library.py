@@ -265,7 +265,7 @@ def initMpc(p,ops):
     tempMin = 6.5                          # lower bound on temperature                    [°C]                    6.5
     tempMax = 40                           # upper bound on temperature                    [°C]                    40
     rhMin = 0                              # lower bound on relative humidity              [#]                     0
-    rhMax = 70                             # upper bound on relative humidity              [#]                     90
+    rhMax = 70                             # upper bound on relative humidity              [#]
     ahMax = rh2vaporDens(tempMax,rhMax,p)  # upper bound on vapor density                  [kg/m^{-3}]                     
     
     # state constraints vector
